@@ -1,61 +1,61 @@
-cmake_minimum_required(VERSION 3.0.2)
+cmake_minimum_required(VERSION 3.5)
 project(kinova_msgs)
 
-find_package(catkin REQUIRED COMPONENTS
-  message_generation
-  actionlib
-  actionlib_msgs
-  geometry_msgs
-)
+# Default to C99
+if(NOT CMAKE_C_STANDARD)
+  set(CMAKE_C_STANDARD 99)
+endif()
 
-#######################################
-## Declare ROS messages and services ##
-#######################################
+# Default to C++14
+if(NOT CMAKE_CXX_STANDARD)
+  set(CMAKE_CXX_STANDARD 14)
+endif()
 
-add_message_files(
-  FILES
-  FingerPosition.msg
-  JointAngles.msg
-  JointVelocity.msg
-  JointTorque.msg
-  KinovaPose.msg
-  PoseVelocity.msg
-  PoseVelocityWithFingers.msg
-  PoseVelocityWithFingerVelocity.msg
-  CartesianForce.msg
-)
+if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+  add_compile_options(-Wall -Wextra -Wpedantic)
+endif()
 
-add_service_files(
-  FILES
-  Start.srv
-  Stop.srv
-  HomeArm.srv
-  SetForceControlParams.srv
-  SetEndEffectorOffset.srv
-  SetNullSpaceModeState.srv
-  SetTorqueControlMode.srv
-  SetTorqueControlParameters.srv
-  ClearTrajectories.srv
-  ZeroTorques.srv
-  AddPoseToCartesianTrajectory.srv
-  RunCOMParametersEstimation.srv
-)
+# find dependencies
+find_package(ament_cmake REQUIRED)
+# uncomment the following section in order to fill in
+# further dependencies manually.
+# find_package(<dependency> REQUIRED)
 
-add_action_files(DIRECTORY action
-  FILES
-  ArmJointAngles.action
-  ArmPose.action
-  Arm_KinovaPose.action
-  SetFingersPosition.action
-)
+find_package(rosidl_default_generators REQUIRED)
 
-generate_messages(
-  DEPENDENCIES
-  actionlib_msgs
-  geometry_msgs
-)
+rosidl_generate_interfaces(${PROJECT_NAME}
+  "msg/FingerPosition.msg"
+  "msg/JointAngles.msg"
+  "msg/JointVelocity.msg"
+  "msg/JointTorque.msg"
+  "msg/KinovaPose.msg"
+  "msg/PoseVelocity.msg"
+  "msg/PoseVelocityWithFingers.msg"
+  "msg/PoseVelocityWithFingerVelocity.msg"
+  "msg/CartesianForce.msg"
+  "srv/Start.srv"
+  "srv/Stop.srv"
+  "srv/HomeArm.srv"
+  "srv/SetForceControlParams.srv"
+  "srv/SetEndEffectorOffset.srv"
+  "srv/SetNullSpaceModeState.srv"
+  "srv/SetTorqueControlMode.srv"
+  "srv/SetTorqueControlParameters.srv"
+  "srv/ClearTrajectories.srv"
+  "srv/ZeroTorques.srv"
+  "srv/AddPoseToCartesianTrajectory.srv"
+  "srv/RunCOMParametersEstimation.srv"
+ )
 
-catkin_package(
-  CATKIN_DEPENDS actionlib_msgs geometry_msgs message_runtime
-)
+if(BUILD_TESTING)
+  find_package(ament_lint_auto REQUIRED)
+  # the following line skips the linter which checks for copyrights
+  # uncomment the line when a copyright and license is not present in all source files
+  #set(ament_cmake_copyright_FOUND TRUE)
+  # the following line skips cpplint (only works in a git repo)
+  # uncomment the line when this package is not in a git repo
+  #set(ament_cmake_cpplint_FOUND TRUE)
+  ament_lint_auto_find_test_dependencies()
+endif()
 
+ament_package()
